@@ -48,7 +48,6 @@ export default function Organizations() {
 
   useEffect(() => {
     let cancelled = false
-    setStatus('loading')
     Promise.all([fetchOrganizations(), fetchUpcomingEventCounts()])
       .then(([orgData, countData]) => {
         if (cancelled) return
@@ -149,7 +148,10 @@ export default function Organizations() {
           <Message
             title="Couldn’t load organizations"
             action={
-              <button type="button" onClick={() => setAttempt((a) => a + 1)} className={buttonClass}>
+              <button type="button" onClick={() => {
+                  setStatus('loading')
+                  setAttempt((a) => a + 1)
+                }} className={buttonClass}>
                 Try again
               </button>
             }

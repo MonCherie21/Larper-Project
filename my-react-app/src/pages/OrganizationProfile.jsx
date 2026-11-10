@@ -80,20 +80,22 @@ export default function OrganizationProfile() {
 
   useEffect(() => {
     let cancelled = false
-    setState({ status: 'loading' })
     Promise.all([fetchOrganization(id), fetchOrganizationEvents(id), fetchOrganizerName(id)])
       .then(([org, events, organizer]) => {
-        if (!cancelled) setState({ status: 'ready', org, events, organizer })
+        if (!cancelled) setState({ status: 'ready', org, events, organizer, id, attempt, now: Date.now() })
       })
       .catch(() => {
-        if (!cancelled) setState({ status: 'error' })
+        if (!cancelled) setState({ status: 'error', id, attempt })
       })
     return () => {
       cancelled = true
     }
   }, [id, attempt])
 
-  if (state.status === 'loading') {
+  // A route change or retry displays the skeleton until its own request resolves.
+  const viewStatus = state.id === id && state.attempt === attempt ? state.status : 'loading'
+
+  if (viewStatus === 'loading') {
     return (
       <div className="mx-auto max-w-3xl py-2 sm:py-4">
         <Breadcrumb />
@@ -102,7 +104,7 @@ export default function OrganizationProfile() {
     )
   }
 
-  if (state.status === 'error') {
+  if (viewStatus === 'error') {
     return (
       <div className="mx-auto max-w-3xl py-2 sm:py-4">
         <Breadcrumb />
@@ -144,7 +146,7 @@ export default function OrganizationProfile() {
   }
 
   // Events arrive sorted by start_time (oldest first).
-  const now = Date.now()
+  const now = state.now
   const upcoming = events.filter((e) => new Date(e.end_time).getTime() >= now)
   const recent = events
     .filter((e) => new Date(e.end_time).getTime() < now)
