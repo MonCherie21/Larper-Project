@@ -87,6 +87,7 @@ export default function Profile() {
         </dl>
         <div className="flex flex-wrap gap-3 border-t border-slate-100 pt-5">
           <Link to="/bookmarks" className="rounded-xl bg-indigo-700 px-5 py-2.5 text-sm font-bold text-white hover:bg-indigo-800">My bookmarks</Link>
+          <Link to="/preferences" className="rounded-xl border border-indigo-300 px-5 py-2.5 text-sm font-bold text-indigo-700 hover:bg-indigo-50">My interests</Link>
           <button type="button" disabled={signingOut} onClick={logout} className="rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-50">
             {signingOut ? 'Signing out...' : 'Sign out'}
           </button>

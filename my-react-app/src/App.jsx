@@ -10,6 +10,8 @@ import Profile from './pages/Profile.jsx'
 import SignIn from './pages/SignIn.jsx'
 import OrganizerDashboard from './pages/OrganizerDashboard.jsx'
 import OrganizerEventForm from './pages/OrganizerEventForm.jsx'
+import AdminDashboard from './pages/AdminDashboard.jsx'
+import Preferences from './pages/Preferences.jsx'
 import NotFound from './pages/NotFound.jsx'
 
 export default function App() {
@@ -25,6 +27,8 @@ export default function App() {
           <Route path="bookmarks" element={<Bookmarks />} />
           <Route path="profile" element={<Profile />} />
           <Route path="sign-in" element={<SignIn />} />
+          <Route path="admin" element={<AdminDashboard />} />
+          <Route path="preferences" element={<Preferences />} />
           <Route path="organizer" element={<OrganizerDashboard />} />
           <Route path="organizer/events/new" element={<OrganizerEventForm />} />
           <Route path="organizer/events/:id/edit" element={<OrganizerEventForm />} />
