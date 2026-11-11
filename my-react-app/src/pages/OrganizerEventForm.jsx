@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import OrganizerGate from '../components/OrganizerGate'
 import StatusBadge from '../components/StatusBadge'
@@ -28,6 +28,7 @@ function EventEditor({ org, initial }) {
     end: toLocalInput(initial.end_time),
   } : EMPTY)
   const [poster, setPoster] = useState(null)
+  const posterInput = useRef(null)
   const [removePoster, setRemovePoster] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
@@ -44,6 +45,14 @@ function EventEditor({ org, initial }) {
     setError('')
     setPoster(file)
     setRemovePoster(false)
+  }
+
+  // Clear the native file input as well as React state, allowing the same
+  // photo to be selected again. A selected file has not been uploaded yet.
+  function clearSelectedPoster() {
+    setPoster(null)
+    if (posterInput.current) posterInput.current.value = ''
+    setError('')
   }
 
   async function save(event) {
@@ -126,16 +135,32 @@ function EventEditor({ org, initial }) {
         </div>
         <div>
           <label htmlFor="event-poster" className="block text-sm font-bold text-slate-800">Event poster (optional)</label>
-          <input id="event-poster" type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => selectPoster(e.target.files?.[0])} className="mt-2 block w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-indigo-100 file:px-3 file:py-2 file:font-semibold file:text-indigo-700" />
+          <input ref={posterInput} id="event-poster" type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => selectPoster(e.target.files?.[0])} className="mt-2 block w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-indigo-100 file:px-3 file:py-2 file:font-semibold file:text-indigo-700" />
           <p className="mt-2 text-xs text-slate-500">PNG, JPG or WebP, up to 5 MB. Do not upload private approval documents here.</p>
-          {poster && <p className="mt-2 text-sm font-medium text-indigo-700">Selected: {poster.name}</p>}
+          {poster && (
+            <div className="mt-3 flex flex-wrap items-center gap-3 rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-3">
+              <p className="min-w-0 flex-1 break-all text-sm font-medium text-indigo-800">Selected: {poster.name}</p>
+              <button type="button" disabled={busy} onClick={clearSelectedPoster}
+                className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-50 disabled:opacity-50">
+                Remove selected photo
+              </button>
+            </div>
+          )}
           {existingPoster && (
             <div className="mt-3 flex flex-wrap items-center gap-4">
               <img src={initial.poster_url} alt="Current event poster" className="h-24 w-36 rounded-xl object-cover" />
               <button type="button" onClick={() => setRemovePoster(true)} className="text-sm font-semibold text-rose-700 hover:underline">Remove current poster</button>
             </div>
           )}
-          {removePoster && <p className="mt-2 text-sm text-rose-700">Current poster will be removed when you save.</p>}
+          {removePoster && (
+            <div className="mt-3 flex flex-wrap items-center gap-3">
+              <p className="text-sm text-rose-700">Current poster will be removed when you save.</p>
+              <button type="button" disabled={busy} onClick={() => setRemovePoster(false)}
+                className="text-sm font-semibold text-indigo-700 underline hover:text-indigo-900 disabled:opacity-50">
+                Undo removal
+              </button>
+            </div>
+          )}
         </div>
         <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-relaxed text-amber-900">
           <strong>University approval remains required.</strong> Your event will stay pending until administrators verify the applicable paperwork, clearances, and dean's approval. Editing an approved or rejected event sends it back for review.
