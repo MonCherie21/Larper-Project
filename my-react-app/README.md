@@ -2,6 +2,8 @@
 
 The React + Vite frontend for Campus Connect.
 
+**Production website:** [https://campis.vercel.app](https://campis.vercel.app)
+
 For the complete project description, architecture, migrations, deployment and demo instructions, start with the [main project README](../README.md). Read the [CHANGELOG](../CHANGELOG.md) for the development history of Features 01–08 and follow-up fixes.
 
 ## Run locally

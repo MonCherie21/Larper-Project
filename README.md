@@ -4,7 +4,9 @@
 **Primary challenge:** Quality of Life  
 **Related themes:** EdTech / Academic Accessibility; Data-Driven Administration
 
-> **Before submission:** Add your team's 3–5 members and their programs/sections here. Add the deployed URL after hosting.
+> **Live platform:** [https://campis.vercel.app](https://campis.vercel.app)  
+> **GitHub:** [MonCherie21/Larper-Project](https://github.com/MonCherie21/Larper-Project)  
+> **Team:** Add the actual team members and programs/sections before final submission.
 
 ## Documentation index
 
@@ -126,7 +128,7 @@ See `my-react-app/FEATURE06_07_08_README.md` for additional tests.
 
 ## Vercel deployment
 
-1. Connect the GitHub repository `MonCherie21/Larper-Project` to Vercel.
+1. **Deployed production website:** [https://campis.vercel.app](https://campis.vercel.app). Connect the GitHub repository `MonCherie21/Larper-Project` to Vercel to manage future deployments.
 2. Set **Root Directory** to `my-react-app`, **Framework** to Vite, **Build Command** to `npm run build`, and **Output Directory** to `dist`.
 3. Under Vercel Project Settings → Environment Variables, set **VITE_SUPABASE_URL** and **VITE_SUPABASE_PUBLISHABLE_KEY** for Production. Redeploy when changed.
 4. The `my-react-app/vercel.json` rewrite sends direct React Router URLs (e.g. `/admin`) to the SPA entry point.
@@ -141,4 +143,4 @@ No timetable synchronization, participation eligibility check, university SSO, p
 
 Official theme **Student Around Services**; submission deadline **November 12, 2026, 12:00 PM**; pitching **November 12, 2026, 1:00 PM** at **CTE Function Hall**. Submission requires a source-code/prototype link and complete README, a **5–10 slide deck**, and a **maximum 10-minute live pitch** with working demo plus Q&A.
 
-Add your team's names and a verified deployment URL before submitting.
+**Live deployment:** [Campus Connect](https://campis.vercel.app). Add the team's actual names and double-check all required submissions before sending the final repository link.

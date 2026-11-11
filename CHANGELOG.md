@@ -2,14 +2,18 @@
 
 Development milestones and fixes for **Hack4Success 2026**. This history summarizes changes already committed to GitHub, not a guarantee that every workflow has completed production quality assurance. For installation, architecture and submission details, see the [main README](README.md).
 
-## Unreleased — Hackathon documentation and hosting preparation
+## 2026-11-12 — Production deployment and hackathon documentation
 
 - Created a single project-wide README at the repository root with feature overview, architecture, setup, SQL migration order, role permissions, testing and Vercel deployment.
 - Replaced the default Vite app README with Campus Connect quickstart instructions.
 - Added Vercel single-page application rewrite configuration for direct URLs such as `/admin` and `/events/:id`.
 - Fixed SQL function dollar quoting in the Feature 05 setup file for new installations. Existing live Supabase databases are not automatically changed.
 - Added this changelog and a documentation index linking all feature guides.
-- Production build, hosting and final role/RLS checks remain to be verified.
+- **Vercel production deployment succeeded:** [https://campis.vercel.app](https://campis.vercel.app) (team-reported deployment result).
+- Updated the Supabase email confirmation Site URL; new account confirmation returned to the live Vercel website (team-reported test).
+- Confirmed one downloaded `.ics` event imported into Google Calendar with the expected date, time, title, description and location (team-reported test).
+- An approved event displayed the total of two RSVPs during testing.
+- Final direct API/RLS negative checks and remaining production smoke tests should still be completed.
 
 ## 2026-11-11 — Features 06, 07 and 08 integrated
 
@@ -79,9 +83,9 @@ Implemented in [PR #3](https://github.com/MonCherie21/Larper-Project/pull/3).
 ## Remaining release checks
 
 - Run `npm ci`, `npm run lint` and `npm run build` using the final branch.
-- Verify Vercel production hosting, environment variables and refreshing deep links.
+- Verify the deployed application continues to load data correctly and that nested route refreshes work.
 - Test calendar download/import, duplicate RSVP handling and bookmarks.
 - Verify database RLS for real student, organizer and admin accounts, including direct API operations.
-- Replace temporary demo data and add final team members and deployment URL to [README.md](README.md).
+- Replace temporary demo data as appropriate and add final team members to [README.md](README.md). The deployed URL is now included.
 
 For detailed steps, see the feature-specific documentation linked from the [main README](README.md).

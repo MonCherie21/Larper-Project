@@ -1,10 +1,10 @@
 # Campus Connect — Features 06, 07, and 08
 
-Branch: integration/features-06-07-08. This branch builds on the existing merged Features 01–05.
+These features have been integrated into `main`. The original integration branch was `integration/features-06-07-08`. Live prototype: [https://campis.vercel.app](https://campis.vercel.app).
 
 ## Install & database migration
 1. Do NOT re-run the original schema or re-create your existing seeded test users.
-2. Apply **only** supabase/06_07_08_features.sql in the Supabase SQL Editor. It adds two review fields, review audit fields, private student preference fields, a public-count RPC, and updates the event approval and RSVP insertion policies.
+2. For a **new** database, apply `supabase/06_07_08_features.sql` after the preceding migrations. The existing live Supabase project has already run this migration; **do not apply it again just because you pulled GitHub changes**. It adds review fields, preferences, a public-count RPC, and updated policies.
 3. Run npm install, npm run lint, npm run build, npm run dev from my-react-app.
 4. Keep .env private. No secret/service-role keys belong in Vite.
 5. Use admin@example.edu to test /admin; organizer accounts should get "Administrator access only."
@@ -46,4 +46,4 @@ Branch: integration/features-06-07-08. This branch builds on the existing merged
 ## Current limitations
 - No real academic schedule source; don't invent compatibility.
 - Events use the existing fields as keywords; no new event tags table is added.
-- React/browser tests and Supabase migration have NOT been executed by the code generator; verify against the real Supabase project.
+- The team has reported successful live tests for admin approval/rejection/unpublication, recommendations, RSVP totals, email confirmation redirection, and Google Calendar `.ics` import. These user-reported checks are not a substitute for a full security regression or automated end-to-end test.

@@ -1,4 +1,4 @@
-# Supabase setup (Feature 02 + Feature 04)
+# Supabase database setup and migrations
 
 The SQL files here are for review and **manual execution** in the Supabase SQL Editor. Committing them to GitHub does **not** apply database changes.
 
@@ -6,11 +6,15 @@ The SQL files here are for review and **manual execution** in the Supabase SQL E
 
 1. Run `schema.sql` once. Do not blindly rerun it: some policies are not idempotent.
 2. Run `02b_security_fixes.sql` to prevent role escalation and unauthorized event approvals, restrict organization creation, and create a public organizer display-name view.
-3. Create test users via Supabase Authentication, then confirm the `profiles` rows exist.
-4. Make a copy of `examples/seed.sql`, replace **all** ALICE_ID, BOB_ID, ADMIN_ID placeholders with real Auth UUIDs, and run once on a test project.
-5. Make a copy of `examples/seed_04_organizations.sql`, replace ALICE_ID, then run to add extra sample organizations and events.
+3. Apply `03_student_permissions.sql` for public approved-event reads and signed-in participation grants.
+4. Apply `05_organizer_portal.sql` for organizer event management and the `event-posters` bucket.
+5. Apply `patches/05_fix_storage_owner_policy.sql` for the scoped poster ownership helper.
+6. Apply `06_07_08_features.sql` for admin clearances, student preferences, and RSVP total functions.
+7. Optionally create test users in Supabase Authentication and confirm the `profiles` rows exist.
+8. For a test database only, copy `examples/seed.sql`, replace the sample Auth UUID placeholders, and run once.
+9. For a test database only, copy `examples/seed_04_organizations.sql`, replace placeholders, and run to add sample organizations/events.
 
-For an existing project, inspect actual tables, policies, and data **before** running anything. These sample files are not executable unchanged: they intentionally contain placeholders.
+**The existing Campus Connect production database already has its migrations applied. Do not rerun the schema or reload seed scripts just to update documentation.** For any existing project, inspect actual tables, policies, and data **before** running anything. These sample files are not executable unchanged: they intentionally contain placeholders.
 
 ## Security notes
 
