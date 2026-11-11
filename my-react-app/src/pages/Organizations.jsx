@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
 import OrganizationCard from '../components/OrganizationCard'
 import {
   ORG_CATEGORIES,
@@ -79,25 +78,13 @@ export default function Organizations() {
 
   return (
     <div className="py-2 sm:py-4">
-      <nav aria-label="Breadcrumb" className="text-sm text-slate-500">
-        <Link to="/" className="hover:text-indigo-700 hover:underline">
-          Dashboard
-        </Link>
-        <span className="mx-2" aria-hidden="true">/</span>
-        <span className="text-slate-900">Organizations</span>
-      </nav>
 
-      <header className="mt-4 max-w-2xl">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-          Find your group on campus
-        </h1>
-        <p className="mt-2 text-slate-600">
-          Browse every club, team, and student group in one place, including the small ones
-          that don’t post much.
-        </p>
-      </header>
 
-      <div className="mt-8 space-y-4">
+      <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+        Clubs and Organizations
+      </h1>
+
+      <div className="mt-7 space-y-4">
         <div>
           <label htmlFor="org-search" className="sr-only">
             Search organizations by name
@@ -108,7 +95,7 @@ export default function Organizations() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search by organization name"
-            className="w-full max-w-md rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-slate-900 placeholder:text-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600/30"
+            className="w-full max-w-xl rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-slate-900 placeholder:text-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600/30"
           />
         </div>
 
