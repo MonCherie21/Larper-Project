@@ -1,16 +1,20 @@
-# React + Vite
+# Campus Connect — Web App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The React + Vite frontend for Campus Connect.
 
-Currently, two official plugins are available:
+Read the [project documentation](../README.md) for system purpose, user roles, architecture, migrations, deployment and demo instructions.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Run locally
 
-## React Compiler
+```sh
+npm ci
+npm run lint
+npm run build
+npm run dev
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Provide a local `.env` with `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`. Use only the public publishable key in frontend code.
 
-## Expanding the ESLint configuration
+**Vercel:** Set this `my-react-app` directory as the project Root Directory; Vite; build `npm run build`; output `dist`. The `vercel.json` rewrite supports direct React Router links.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+For detailed Feature 06–08 tests, see [FEATURE06_07_08_README.md](FEATURE06_07_08_README.md).

@@ -100,7 +100,7 @@ language sql
 stable
 security definer
 set search_path = ''
-as $
+as $$
   select auth.uid() is not null
     and exists (
       select 1
@@ -108,7 +108,7 @@ as $
       where o.owner_id = auth.uid()
         and o.id::text = (storage.foldername(object_path))[1]
     );
-$;
+$$;
 
 revoke all on function private.is_event_poster_owner(text) from public;
 grant usage on schema private to authenticated;
