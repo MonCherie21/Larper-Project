@@ -26,7 +26,9 @@ export default function Navbar() {
   }, [user?.id])
 
   const showOrganizer = user && roleInfo.id === user.id && ['organizer', 'admin'].includes(roleInfo.role)
-  const visible = showOrganizer ? [...links.slice(0, 3), { to: '/organizer', label: 'Organizer' }, ...links.slice(3)] : links
+  const showAdmin = user && roleInfo.id === user.id && roleInfo.role === 'admin'
+  const withOrganizer = showOrganizer ? [...links.slice(0, 3), { to: '/organizer', label: 'Organizer' }, ...links.slice(3)] : links
+  const visible = showAdmin ? [...withOrganizer.slice(0, 3), { to: '/admin', label: 'Admin' }, ...withOrganizer.slice(3)] : withOrganizer
 
   return (
     <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">

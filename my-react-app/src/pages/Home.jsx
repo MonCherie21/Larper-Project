@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import EventCard from '../components/EventCard'
 import StatusPanel from '../components/StatusPanel'
+import RecommendedSection from '../components/RecommendedSection'
 import { EVENT_CATEGORIES } from '../lib/eventFormat'
 import { fetchUpcomingEvents } from '../services/events'
 
@@ -67,6 +68,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <RecommendedSection />
 
       <section aria-labelledby="featured-title" className="space-y-5">
         <div className="flex flex-wrap items-end justify-between gap-3">

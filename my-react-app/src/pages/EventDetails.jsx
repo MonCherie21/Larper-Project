@@ -4,8 +4,9 @@ import { EventPoster } from '../components/EventCard'
 import StatusPanel from '../components/StatusPanel'
 import { useAuth } from '../hooks/useAuth'
 import { displayCategory, eventRange } from '../lib/eventFormat'
+import { downloadIcs } from '../lib/calendar'
 import { fetchEventDetails } from '../services/events'
-import { fetchParticipation, setBookmark, setRsvp } from '../services/student'
+import { fetchParticipation, fetchPublicRsvpCount, setBookmark, setRsvp } from '../services/student'
 
 export default function EventDetails() {
   const { id } = useParams()
@@ -15,6 +16,7 @@ export default function EventDetails() {
   const [saved, setSaved] = useState({ status: 'loading', key: null })
   const [busy, setBusy] = useState('')
   const [actionError, setActionError] = useState('')
+  const [rsvpTotal, setRsvpTotal] = useState(null)
 
   useEffect(() => {
     let active = true
@@ -28,6 +30,14 @@ export default function EventDetails() {
       .catch(() => {
         if (active) setState({ status: 'error', id, retry })
       })
+    return () => { active = false }
+  }, [id, retry])
+
+  useEffect(() => {
+    let active = true
+    fetchPublicRsvpCount(id).then(count => {
+      if (active) setRsvpTotal(count)
+    }).catch(() => { if (active) setRsvpTotal(null) })
     return () => { active = false }
   }, [id, retry])
 
@@ -59,6 +69,7 @@ export default function EventDetails() {
         const next = !saved.rsvped
         await setRsvp(user.id, id, next)
         setSaved((current) => ({ ...current, rsvped: next }))
+        setRsvpTotal((total) => total === null ? total : Math.max(0, total + (next ? 1 : -1)))
       } else {
         const next = !saved.bookmarked
         await setBookmark(user.id, id, next)
@@ -118,14 +129,23 @@ export default function EventDetails() {
             <h2 id="about-event" className="text-xl font-extrabold text-slate-900">About this event</h2>
             <p className="whitespace-pre-line leading-7 text-slate-700">{event.description || 'The organizing group has not yet added further event details.'}</p>
           </section>
+
+          <section className="space-y-3 border-t border-slate-100 pt-6" aria-labelledby="calendar-title">
+            <h2 id="calendar-title" className="text-xl font-extrabold text-slate-900">Save the date</h2>
+            <p className="text-sm text-slate-600">Export this approved event to Apple Calendar, Outlook, or another calendar app. Calendar export doesn't require signing in.</p>
+            <button type="button" onClick={() => downloadIcs(event)}
+              className="rounded-xl border border-indigo-300 bg-white px-5 py-3 text-sm font-bold text-indigo-700 hover:bg-indigo-50">
+              Download calendar (.ics)
+            </button>
+          </section>
           <section className="space-y-3 border-t border-slate-100 pt-6" aria-labelledby="participation-title">
             <h2 id="participation-title" className="text-xl font-extrabold text-slate-900">Participation & RSVP</h2>
+            {rsvpTotal !== null && <p className="text-sm font-semibold text-indigo-700">{rsvpTotal} {rsvpTotal === 1 ? 'student has' : 'students have'} RSVP'd</p>}
             <p className="text-sm leading-relaxed text-slate-600">
               RSVP records your interest in attending. It does not guarantee a seat or confirm that you meet participation requirements. Check with the organizer for eligibility and official registration instructions.
             </p>
-            {ended ? (
-              <p className="rounded-xl bg-slate-100 p-4 text-sm font-semibold text-slate-600">This event has ended. New RSVPs are closed.</p>
-            ) : authLoading ? (
+            {ended && <p className="rounded-xl bg-slate-100 p-4 text-sm font-semibold text-slate-600">This event has ended. New RSVPs are closed, but you can still manage an existing RSVP or bookmark.</p>}
+            {authLoading ? (
               <p className="text-sm text-slate-500">Checking your account...</p>
             ) : !user ? (
               <Link to={'/sign-in?next=' + encodeURIComponent('/events/' + id)} className="inline-block rounded-xl bg-indigo-700 px-5 py-3 text-sm font-bold text-white hover:bg-indigo-800">
@@ -135,7 +155,7 @@ export default function EventDetails() {
               <div className="space-y-3">
                 {savedReady ? (
                   <div className="flex flex-wrap gap-3">
-                    <button type="button" disabled={Boolean(busy)} onClick={() => changeParticipation('rsvp')} className={'rounded-xl px-5 py-3 text-sm font-bold transition disabled:opacity-50 ' + (saved.rsvped ? 'border border-emerald-300 bg-emerald-50 text-emerald-800 hover:bg-emerald-100' : 'bg-indigo-700 text-white hover:bg-indigo-800')}>
+                    <button type="button" disabled={Boolean(busy) || (ended && !saved.rsvped)} onClick={() => changeParticipation('rsvp')} className={'rounded-xl px-5 py-3 text-sm font-bold transition disabled:opacity-50 ' + (saved.rsvped ? 'border border-emerald-300 bg-emerald-50 text-emerald-800 hover:bg-emerald-100' : 'bg-indigo-700 text-white hover:bg-indigo-800')}>
                       {busy === 'rsvp' ? 'Saving...' : saved.rsvped ? '✓ RSVP saved · Cancel RSVP' : 'RSVP for this event'}
                     </button>
                     <button type="button" disabled={Boolean(busy)} onClick={() => changeParticipation('bookmark')} className={'rounded-xl border px-5 py-3 text-sm font-bold transition disabled:opacity-50 ' + (saved.bookmarked ? 'border-indigo-400 bg-indigo-50 text-indigo-700' : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50')}>
