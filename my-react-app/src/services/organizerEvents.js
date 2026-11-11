@@ -96,7 +96,7 @@ async function uploadPoster(organizationId, file) {
   if (authError) throw authError
   if (!session?.access_token) throw new Error('Sign in again to upload an event poster.')
 
-  const projectUrl = import.meta.env.VITE_SUPABASE_URL?.replace(/\\/+$/, '')
+  const projectUrl = import.meta.env.VITE_SUPABASE_URL?.replace(/\/+$/, '')
   const publicKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
   if (!projectUrl || !publicKey) throw new Error('Supabase is not configured for uploads.')
 
