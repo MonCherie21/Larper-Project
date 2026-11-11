@@ -85,9 +85,40 @@ async function uploadPoster(organizationId, file) {
   validateFile(file)
   const ext = file.type === 'image/png' ? 'png' : file.type === 'image/webp' ? 'webp' : 'jpg'
   const path = `${organizationId}/${crypto.randomUUID()}.${ext}`
-  const { error } = await client().storage.from(POSTER_BUCKET)
-    .upload(path, file, { cacheControl: '3600', contentType: file.type, upsert: false })
-  if (error) throw error
+
+  // Supabase's standard storage.upload() sends multipart/form-data. Some
+  // hosted Storage deployments have reported a false-positive RLS denial for
+  // multipart uploads even when the same user's INSERT policy is valid.
+  // Use a raw binary POST with a fresh path and no x-upsert header.
+  // This is STILL subject to the existing storage.objects INSERT RLS policy;
+  // only the logged-in user's access token and the public client key are used.
+  const { data: { session }, error: authError } = await client().auth.getSession()
+  if (authError) throw authError
+  if (!session?.access_token) throw new Error('Sign in again to upload an event poster.')
+
+  const projectUrl = import.meta.env.VITE_SUPABASE_URL?.replace(/\\/+$/, '')
+  const publicKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
+  if (!projectUrl || !publicKey) throw new Error('Supabase is not configured for uploads.')
+
+  const response = await fetch(
+    `${projectUrl}/storage/v1/object/${POSTER_BUCKET}/${path}`,
+    {
+      method: 'POST',
+      headers: {
+        apikey: publicKey,
+        Authorization: `Bearer ${session.access_token}`,
+        'Content-Type': file.type,
+      },
+      body: file,
+    },
+  )
+
+  if (!response.ok) {
+    const details = await response.json().catch(() => null)
+    const reason = details?.message || details?.error || response.statusText
+    throw new Error(`Poster upload failed (HTTP ${response.status}): ${reason}`)
+  }
+
   const { data } = client().storage.from(POSTER_BUCKET).getPublicUrl(path)
   return { path, url: data.publicUrl }
 }
@@ -149,6 +180,7 @@ export async function deleteEvent(event) {
 export function friendlyError(error) {
   const message = error?.message || ''
   if (error instanceof TypeError) return 'Could not reach Supabase. Check your internet connection.'
+  if (message.startsWith('Poster upload failed')) return message
   if (/bucket not found/i.test(message)) return 'Poster storage is not set up. Run supabase/05_organizer_portal.sql.'
   if (/permission denied|row.level security|not authorized/i.test(message) || error?.code === '42501') {
     return 'You do not have permission to perform this action. Check your account and database policies.'
