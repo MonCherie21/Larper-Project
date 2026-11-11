@@ -8,6 +8,8 @@ import OrganizationProfile from './pages/OrganizationProfile.jsx'
 import Bookmarks from './pages/Bookmarks.jsx'
 import Profile from './pages/Profile.jsx'
 import SignIn from './pages/SignIn.jsx'
+import OrganizerDashboard from './pages/OrganizerDashboard.jsx'
+import OrganizerEventForm from './pages/OrganizerEventForm.jsx'
 import NotFound from './pages/NotFound.jsx'
 
 export default function App() {
@@ -23,6 +25,9 @@ export default function App() {
           <Route path="bookmarks" element={<Bookmarks />} />
           <Route path="profile" element={<Profile />} />
           <Route path="sign-in" element={<SignIn />} />
+          <Route path="organizer" element={<OrganizerDashboard />} />
+          <Route path="organizer/events/new" element={<OrganizerEventForm />} />
+          <Route path="organizer/events/:id/edit" element={<OrganizerEventForm />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

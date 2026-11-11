@@ -1,4 +1,7 @@
+import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
+import { useAuth } from '../hooks/useAuth'
+import { supabase } from '../lib/supabase'
 
 const links = [
   { to: '/', label: 'Dashboard', end: true },
@@ -9,6 +12,22 @@ const links = [
 ]
 
 export default function Navbar() {
+  const { user } = useAuth()
+  const [roleInfo, setRoleInfo] = useState({ id: null, role: null })
+
+  useEffect(() => {
+    if (!user?.id || !supabase) return undefined
+    let active = true
+    supabase.from('profiles').select('role').eq('id', user.id).maybeSingle()
+      .then(({ data, error }) => {
+        if (active) setRoleInfo({ id: user.id, role: error ? null : data?.role || null })
+      })
+    return () => { active = false }
+  }, [user?.id])
+
+  const showOrganizer = user && roleInfo.id === user.id && ['organizer', 'admin'].includes(roleInfo.role)
+  const visible = showOrganizer ? [...links.slice(0, 3), { to: '/organizer', label: 'Organizer' }, ...links.slice(3)] : links
+
   return (
     <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
       <nav aria-label="Main navigation" className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
@@ -21,16 +40,10 @@ export default function Navbar() {
           Campus <span className="text-indigo-700">Connect</span>
         </NavLink>
         <div className="order-3 -mx-4 flex w-[calc(100%+2rem)] items-center gap-1 overflow-x-auto px-4 pb-1 sm:order-2 sm:mx-0 sm:w-auto sm:overflow-visible sm:px-0 sm:pb-0">
-          {links.map(({ to, label, end }) => (
-            <NavLink
-              key={to}
-              to={to}
-              end={end}
-              className={({ isActive }) =>
-                'shrink-0 rounded-lg px-3 py-2 text-sm font-semibold transition-colors ' +
-                (isActive ? 'bg-indigo-50 text-indigo-700' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900')
-              }
-            >
+          {visible.map(({ to, label, end }) => (
+            <NavLink key={to} to={to} end={end}
+              className={({ isActive }) => 'shrink-0 rounded-lg px-3 py-2 text-sm font-semibold transition-colors ' +
+                (isActive ? 'bg-indigo-50 text-indigo-700' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900')}>
               {label}
             </NavLink>
           ))}
