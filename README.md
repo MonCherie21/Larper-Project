@@ -6,6 +6,22 @@
 
 > **Before submission:** Add your team's 3–5 members and their programs/sections here. Add the deployed URL after hosting.
 
+## Documentation index
+
+**Start here:** this root `README.md` is the primary guide for judges and new contributors. The feature READMEs remain available as detailed reference files.
+
+| Document | Purpose |
+| --- | --- |
+| [CHANGELOG.md](CHANGELOG.md) | Features 01–08, fixes and release readiness |
+| [Web app README](my-react-app/README.md) | Quickstart for the React/Vite app |
+| [Feature 01 — Foundation](my-react-app/FEATURE01_README.md) | Base setup and environment configuration |
+| [Features 02 & 04 — Database and organizations](supabase/README.md) | Supabase schema, security and organizations |
+| [Feature 03 — Student discovery](my-react-app/FEATURE03_README.md) | Events, search, filtering, profile and bookmarks |
+| [Feature 05 — Organizer portal](my-react-app/FEATURE05_README.md) | Submissions, poster uploads and management |
+| [Features 06–08 — Final feature integration](my-react-app/FEATURE06_07_08_README.md) | Admin review, recommendations and participation |
+
+Some feature-specific documents describe their original implementation stage. For current full-project installation and deployment, use **this README**.
+
 ## The problem
 
 University events and student organization announcements are spread across different Facebook pages and groups. Students may miss activities, competitions or opportunities simply because they don't follow the right page.
@@ -44,6 +60,7 @@ The recommendation system uses a lightweight deterministic weighting: 50% intere
 ```text
 Larper-Project/
 ├─ README.md
+├─ CHANGELOG.md
 ├─ my-react-app/
 │  ├─ src/
 │  │  ├─ pages/          # route pages: student, organizer, admin
