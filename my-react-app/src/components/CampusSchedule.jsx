@@ -90,18 +90,24 @@ function EventCalendar({ events, selectedDay, onSelect }) {
 
 function ScheduleRow({ event }) {
   return (
-    <Link to={'/events/' + event.id}
-      className="group grid gap-2 border-b border-slate-100 px-4 py-3.5 transition hover:bg-slate-50 last:border-0 sm:grid-cols-[minmax(0,1.4fr)_minmax(0,0.95fr)_minmax(0,1.05fr)_1.25rem] sm:items-center sm:gap-4">
+    <Link
+      to={'/events/' + event.id}
+      className="group grid gap-3 px-4 py-4 transition-colors hover:bg-indigo-50/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-indigo-600 sm:grid-cols-[minmax(0,1.2fr)_minmax(0,0.9fr)_minmax(0,1.05fr)_1.25rem] sm:items-center sm:gap-3 sm:px-5"
+    >
       <div className="min-w-0">
-        <span className="block truncate font-semibold text-slate-900 group-hover:text-indigo-700">{event.title}</span>
-        <span className="mt-1 block text-xs text-slate-500">{displayCategory(event.category)}</span>
+        <span className="block font-bold leading-snug text-slate-900 group-hover:text-indigo-700">{event.title}</span>
+        <span className="mt-1 block text-xs font-medium text-slate-500">{displayCategory(event.category)}</span>
       </div>
-      <p className="truncate text-sm text-slate-600">{event.organizations?.name || 'Campus organizer'}</p>
-      <div className="text-xs leading-relaxed text-slate-600">
-        <p><span className="mr-1 font-semibold text-slate-800">Start:</span>{dateLabel(event.start_time)}, {timeLabel(event.start_time)}</p>
-        <p><span className="mr-2 font-semibold text-slate-800">End:</span>{dateLabel(event.end_time)}, {timeLabel(event.end_time)}</p>
+      <p className="min-w-0 text-sm font-medium text-slate-700">
+        <span className="inline-flex max-w-full items-center rounded-lg border border-indigo-100 bg-indigo-50 px-2.5 py-1 text-indigo-800">
+          <span className="truncate">{event.organizations?.name || 'Campus organizer'}</span>
+        </span>
+      </p>
+      <div className="space-y-1 text-xs leading-relaxed text-slate-600">
+        <p><span className="mr-1.5 font-bold text-slate-800">Start:</span>{dateLabel(event.start_time)}, {timeLabel(event.start_time)}</p>
+        <p><span className="mr-2 font-bold text-slate-800">End:</span>{dateLabel(event.end_time)}, {timeLabel(event.end_time)}</p>
       </div>
-      <UiIcon name="chevronRight" className="hidden h-4 w-4 text-slate-400 group-hover:text-indigo-700 sm:block" />
+      <UiIcon name="chevronRight" className="hidden h-4 w-4 text-indigo-500 transition group-hover:translate-x-0.5 sm:block" />
     </Link>
   )
 }
@@ -132,15 +138,23 @@ export default function CampusSchedule({ events }) {
         {groups.length === 0 ? (
           <div className="p-8 text-center text-sm text-slate-500">No upcoming events {selectedDay ? 'on this date.' : 'yet.'}</div>
         ) : (
-          <div className="max-h-135 overflow-y-auto">
+          <div className="max-h-135 space-y-3 overflow-y-auto bg-slate-50/70 p-3 sm:p-4">
             {groups.map(group => (
-              <div key={group.key}>
-                <div className="sticky top-0 z-10 flex justify-between border-y border-slate-100 bg-slate-50 px-4 py-2.5 text-xs font-semibold text-slate-600">
-                  <span>{dateLabel(group.items[0].start_time)}</span>
-                  <span>{group.items.length} {group.items.length === 1 ? 'event' : 'events'}</span>
+              <section key={group.key} aria-label={'Events for ' + dateLabel(group.items[0].start_time)}
+                className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-indigo-100 bg-indigo-50/90 px-4 py-3 sm:px-5">
+                  <span className="flex items-center gap-2 text-sm font-bold text-indigo-900">
+                    <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-indigo-600" />
+                    {dateLabel(group.items[0].start_time)}
+                  </span>
+                  <span className="rounded-full border border-indigo-200 bg-white px-2.5 py-1 text-xs font-semibold text-indigo-700">
+                    {group.items.length} {group.items.length === 1 ? 'event' : 'events'}
+                  </span>
                 </div>
-                {group.items.map(event => <ScheduleRow key={event.id} event={event} />)}
-              </div>
+                <div className="divide-y divide-slate-200">
+                  {group.items.map(event => <ScheduleRow key={event.id} event={event} />)}
+                </div>
+              </section>
             ))}
           </div>
         )}

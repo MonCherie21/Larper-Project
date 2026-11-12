@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { demoOrganizationLogo } from '../lib/organizationLogos'
 
 // One tint per category so groups are easy to tell apart at a glance, even
 // when an organization hasn't uploaded a logo. Full class names so Tailwind
@@ -28,17 +29,27 @@ function initials(name) {
     .toUpperCase()
 }
 
-// Logo image, or a tinted initials tile when there's no logo or it fails to load.
+// Show an organization-supplied logo first, then its demo emblem,
+// finally initials. A broken uploaded URL falls back gracefully.
 export function OrgLogo({ org, className = 'h-14 w-14 text-lg' }) {
-  const [broken, setBroken] = useState(false)
+  const [failedSource, setFailedSource] = useState(null)
+  const provided = org.logo_url?.trim() || null
+  const illustrative = demoOrganizationLogo(org.name)
+  const src = provided && provided !== failedSource
+    ? provided
+    : illustrative && illustrative !== failedSource
+      ? illustrative
+      : null
 
-  if (org.logo_url && !broken) {
+  if (src) {
     return (
       <img
-        src={org.logo_url}
-        alt={`${org.name} logo`}
-        onError={() => setBroken(true)}
-        className={`${className} shrink-0 rounded-xl bg-slate-100 object-cover`}
+        src={src}
+        alt={provided === src ? `${org.name} logo` : `Illustrative icon for ${org.name}`}
+        loading="lazy"
+        decoding="async"
+        onError={() => setFailedSource(src)}
+        className={`${className} shrink-0 rounded-xl bg-indigo-50 object-contain`}
       />
     )
   }

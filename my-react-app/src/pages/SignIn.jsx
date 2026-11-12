@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { signIn, signUp } from '../services/student'
+import { LSPU_EMAIL_EXAMPLE, isLspuStudentEmail } from '../lib/institutionalEmail'
 
 export default function SignIn() {
   const navigate = useNavigate()
@@ -24,6 +25,10 @@ export default function SignIn() {
     setNotice('')
     try {
       if (mode === 'signup') {
+        if (!isLspuStudentEmail(email)) {
+          setError('Use your LSPU institutional student email (03xx-xxxx@lspu.edu.ph).')
+          return
+        }
         const result = await signUp(name, email.trim(), password)
         if (result.session) navigate(next, { replace: true })
         else setNotice('Account created. Check your inbox for a confirmation email if your Supabase project requires it, then sign in.')
@@ -65,9 +70,16 @@ export default function SignIn() {
                 </div>
               )}
               <div>
-                <label htmlFor="account-email" className="mb-1.5 block text-sm font-semibold text-slate-700">Email address</label>
-                <input id="account-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" placeholder="student@example.edu"
+                <label htmlFor="account-email" className="mb-1.5 block text-sm font-semibold text-slate-700">{mode === 'signup' ? 'LSPU student email' : 'Email address'}</label>
+                <input id="account-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email"
+                  placeholder={mode === 'signup' ? LSPU_EMAIL_EXAMPLE : 'Email address'}
+                  aria-describedby={mode === 'signup' ? 'institutional-email-help' : undefined}
                   className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100" />
+                {mode === 'signup' && (
+                  <p id="institutional-email-help" className="mt-1.5 text-xs leading-relaxed text-slate-500">
+                    Student registrations require an institutional address in the format 03xx-xxxx@lspu.edu.ph (numbers only). Existing demo accounts can still sign in.
+                  </p>
+                )}
               </div>
               <div>
                 <label htmlFor="account-password" className="mb-1.5 block text-sm font-semibold text-slate-700">Password</label>
