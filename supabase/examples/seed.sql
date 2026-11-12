@@ -28,7 +28,7 @@ update public.profiles set role = 'admin' where id = 'ADMIN_ID';
 
 -- Organization owned by Alice
 insert into public.organizations (id, name, description, category, owner_id) values
-  ('a1111111-1111-1111-1111-111111111111', 'CCS', 'Official student council of the College of Computer Studies.', 'Academic', 'ALICE_ID');
+  ('a1111111-1111-1111-1111-111111111111', 'CCS', 'College of Computer Science.', 'Academic', 'ALICE_ID');
 
 -- Events under that organization — one approved, one still pending
 insert into public.events (id, title, description, category, location, start_time, end_time, organization_id, approval_status) values

@@ -1,17 +1,17 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { demoOrganizationLogo } from '../lib/organizationLogos'
 
 // One tint per category so groups are easy to tell apart at a glance, even
 // when an organization hasn't uploaded a logo. Full class names so Tailwind
 // can detect them.
-const CATEGORY_STYLES = {
-  Academic: { tile: 'bg-sky-100 text-sky-800', badge: 'bg-sky-50 text-sky-800 ring-sky-200' },
-  Sports: { tile: 'bg-orange-100 text-orange-800', badge: 'bg-orange-50 text-orange-800 ring-orange-200' },
-  Arts: { tile: 'bg-rose-100 text-rose-800', badge: 'bg-rose-50 text-rose-800 ring-rose-200' },
-  Technology: { tile: 'bg-violet-100 text-violet-800', badge: 'bg-violet-50 text-violet-800 ring-violet-200' },
-  Cultural: { tile: 'bg-amber-100 text-amber-800', badge: 'bg-amber-50 text-amber-800 ring-amber-200' },
-  'Special Interest': { tile: 'bg-emerald-100 text-emerald-800', badge: 'bg-emerald-50 text-emerald-800 ring-emerald-200' },
-}
+// One restrained visual language across all club types; category remains textual.
+const CATEGORY_STYLES = Object.fromEntries(
+  ['Academic', 'Sports', 'Arts', 'Technology', 'Cultural', 'Special Interest'].map(category => [
+    category,
+    { tile: 'bg-indigo-50 text-indigo-800', badge: 'bg-slate-50 text-slate-700 ring-slate-200' },
+  ]),
+)
 const FALLBACK_STYLE = {
   tile: 'bg-slate-100 text-slate-700',
   badge: 'bg-slate-50 text-slate-700 ring-slate-200',
@@ -29,17 +29,27 @@ function initials(name) {
     .toUpperCase()
 }
 
-// Logo image, or a tinted initials tile when there's no logo or it fails to load.
+// Show an organization-supplied logo first, then its demo emblem,
+// finally initials. A broken uploaded URL falls back gracefully.
 export function OrgLogo({ org, className = 'h-14 w-14 text-lg' }) {
-  const [broken, setBroken] = useState(false)
+  const [failedSource, setFailedSource] = useState(null)
+  const provided = org.logo_url?.trim() || null
+  const illustrative = demoOrganizationLogo(org.name)
+  const src = provided && provided !== failedSource
+    ? provided
+    : illustrative && illustrative !== failedSource
+      ? illustrative
+      : null
 
-  if (org.logo_url && !broken) {
+  if (src) {
     return (
       <img
-        src={org.logo_url}
-        alt={`${org.name} logo`}
-        onError={() => setBroken(true)}
-        className={`${className} shrink-0 rounded-xl bg-slate-100 object-cover`}
+        src={src}
+        alt={provided === src ? `${org.name} logo` : `Illustrative icon for ${org.name}`}
+        loading="lazy"
+        decoding="async"
+        onError={() => setFailedSource(src)}
+        className={`${className} shrink-0 rounded-xl bg-indigo-50 object-contain`}
       />
     )
   }

@@ -27,11 +27,7 @@ export default function Bookmarks() {
 
   return (
     <div className="space-y-6 py-2 sm:py-4">
-      <div>
-        <p className="text-xs font-bold uppercase tracking-widest text-indigo-700">Your campus shortlist</p>
-        <h1 className="mt-1 text-3xl font-extrabold text-slate-900 sm:text-4xl">Bookmarked events</h1>
-        <p className="mt-2 text-slate-600">Keep track of activities you want to revisit.</p>
-      </div>
+      <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">Bookmarked events</h1>
       {!configured && <StatusPanel status="error" title="Supabase isn't configured" description="Add the required values in your local .env file." />}
       {configured && loading && <StatusPanel status="loading" />}
       {configured && !loading && !user && (
@@ -50,7 +46,7 @@ export default function Bookmarks() {
         </div>
       )}
       {configured && !loading && user && viewStatus === 'ready' && state.events.length > 0 && (
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {state.events.map((event) => <EventCard key={event.id} event={event} />)}
         </div>
       )}
