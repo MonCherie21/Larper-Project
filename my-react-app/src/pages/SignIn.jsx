@@ -77,7 +77,7 @@ export default function SignIn() {
                   className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100" />
                 {mode === 'signup' && (
                   <p id="institutional-email-help" className="mt-1.5 text-xs leading-relaxed text-slate-500">
-                    Student registrations require an institutional address in the format 03xx-xxxx@lspu.edu.ph (numbers only). Existing demo accounts can still sign in.
+                    Student registrations require an institutional address in the format 03xx-xxxx@lspu.edu.ph (numbers only).
                   </p>
                 )}
               </div>
