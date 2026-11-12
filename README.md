@@ -5,8 +5,14 @@
 **Related themes:** EdTech / Academic Accessibility; Data-Driven Administration
 
 > **Live platform:** [https://campis.vercel.app](https://campis.vercel.app)  
-> **GitHub:** [MonCherie21/Larper-Project](https://github.com/MonCherie21/Larper-Project)  
-> **Team:** Add the actual team members and programs/sections before final submission.
+> **GitHub:** [MonCherie21/Larper-Project](https://github.com/MonCherie21/Larper-Project)
+
+## Team Members
+
+- Balitaan, Devin Lestat
+- Bautista, Chrysler
+- Endrenal, Mon Euwen
+- Saab, Edmund Joseph
 
 ## Documentation index
 
@@ -157,4 +163,4 @@ No timetable synchronization, participation eligibility check, university SSO, p
 
 Official theme **Student Around Services**; submission deadline **November 12, 2026, 12:00 PM**; pitching **November 12, 2026, 1:00 PM** at **CTE Function Hall**. Submission requires a source-code/prototype link and complete README, a **5–10 slide deck**, and a **maximum 10-minute live pitch** with working demo plus Q&A.
 
-**Live deployment:** [Campus Connect](https://campis.vercel.app). Add the team's actual names and double-check all required submissions before sending the final repository link.
+**Live deployment:** [Campus Connect](https://campis.vercel.app). Verify the listed team members and all required submission materials before sharing the final repository link.
