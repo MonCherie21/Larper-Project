@@ -74,3 +74,14 @@ groups with multiple events on one date.
 For Vercel, merge only after validation, then verify deployment of the updated
 `main` branch. Supabase SQL/hook activation does not happen automatically
 because of a GitHub merge.
+
+## Additional PR #13 feedback refinements
+
+- Removed the explanatory subtitle under **Student profile** (privacy access rules are unchanged).
+- Recolored illustrative emblems to calmer, activity-appropriate flat palettes:
+  CCS navy/steel blue, chess charcoal/wood, teacher education chalkboard green,
+  cultural heritage terracotta, dance dusty rose, robotics muted teal, and
+  varsity basketball orange/charcoal. No third-party or official logos copied.
+- Updated the seeded CCS description to **College of Computer Science**.
+  Existing Supabase data will not update on a GitHub merge:
+  run `supabase/patches/13_ccs_description.sql` once in Supabase SQL Editor.

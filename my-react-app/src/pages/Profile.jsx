@@ -59,7 +59,6 @@ export default function Profile() {
       <header>
         <p className="text-xs font-bold uppercase tracking-widest text-indigo-700">Your Campus Connect account</p>
         <h1 className="mt-1 text-3xl font-extrabold text-slate-900">Student profile</h1>
-        <p className="mt-2 text-slate-600">Only you and authorized administrators can access your profile details.</p>
       </header>
       <section className="space-y-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
         <div className="flex items-center gap-4">
