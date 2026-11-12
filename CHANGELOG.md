@@ -2,6 +2,15 @@
 
 Development milestones and fixes for **Hack4Success 2026**. This history summarizes changes already committed to GitHub, not a guarantee that every workflow has completed production quality assurance. For installation, architecture and submission details, see the [main README](README.md).
 
+## 2026-11-12 — Latest dashboard and onboarding refinements
+
+- [PR #12](https://github.com/MonCherie21/Larper-Project/pull/12) updated branding, calendar dashboard, event cards and navigation.
+- [PR #13](https://github.com/MonCherie21/Larper-Project/pull/13) added distinct Upcoming Events date sections and seven original, muted illustrative club emblems; official uploaded logos take priority.
+- The profile heading now reflects account type (Admin / Organizer profile / Student profile).
+- Sample CCS description is *College of Computer Science.* and CTE has a scoped rename/update patch (*CTE*, *College of Teachers Education*). Existing Supabase records require the separate manual SQL update if not yet applied.
+- Student self-signup now validates the numeric `03xx-xxxx@lspu.edu.ph` pattern in the frontend. A Supabase Auth **Before User Created** hook is provided for server-side enforcement, but **is not active until manually installed and enabled**. Existing users are not blocked by this creation-only rule.
+- [PR #11](https://github.com/MonCherie21/Larper-Project/pull/11) refreshes project and database docs for the current merged application. It changes documentation, not application code or Supabase data.
+
 ## 2026-11-12 — Production deployment and hackathon documentation
 
 - Created a single project-wide README at the repository root with feature overview, architecture, setup, SQL migration order, role permissions, testing and Vercel deployment.
@@ -39,7 +48,7 @@ Implemented in [PR #9](https://github.com/MonCherie21/Larper-Project/pull/9).
 - Added RSVP totals through a limited database function.
 - Added `.ics` calendar export from approved event pages.
 
-**Reported local checks:** Admin rejection and unpublication updated organizer/public state; organizers could edit and resubmit rejected events; recommendations displayed relevant options. Calendar import and production testing were not yet confirmed.
+**Reported initial integration checks:** Admin rejection and unpublication updated organizer/public state; organizers could edit and resubmit rejected events; recommendations displayed relevant options. A later team-reported calendar import and Vercel deployment are recorded in the November 12 section above.
 
 ## 2026-11-11 — Feature 05 organizer portal and follow-up fixes
 
@@ -84,8 +93,10 @@ Implemented in [PR #3](https://github.com/MonCherie21/Larper-Project/pull/3).
 
 - Run `npm ci`, `npm run lint` and `npm run build` using the final branch.
 - Verify the deployed application continues to load data correctly and that nested route refreshes work.
-- Test calendar download/import, duplicate RSVP handling and bookmarks.
+- Retest calendar export/import, duplicate RSVPs and bookmarks on the final deployed build; an earlier Google Calendar import was team-reported as successful.
 - Verify database RLS for real student, organizer and admin accounts, including direct API operations.
+- Confirm the PR #13 CCS/CTE SQL label updates were applied if intended for the live database.
+- Enable and test the Supabase signup hook separately if server-enforced LSPU email restrictions are required; merging its SQL file does not activate the hook.
 - Replace temporary demo data as appropriate and add final team members to [README.md](README.md). The deployed URL is now included.
 
 For detailed steps, see the feature-specific documentation linked from the [main README](README.md).
