@@ -85,3 +85,14 @@ because of a GitHub merge.
 - Updated the seeded CCS description to **College of Computer Science**.
   Existing Supabase data will not update on a GitHub merge:
   run `supabase/patches/13_ccs_description.sql` once in Supabase SQL Editor.
+
+## Final profile and organization labels
+
+- Admin accounts now see **Admin** as the profile heading; organizers see
+  **Organizer profile**, and students retain **Student profile**.
+- **CTE Test Organization** is renamed to **CTE**, with the exact description
+  `College of Teachers Education`.
+- The demo CTE emblem works for both the old and the new organization name.
+- Run `supabase/patches/13_ccs_description.sql` for both CCS and CTE updates
+  on an existing database. The script checks the test CTE owner's email and
+  does not alter any organization ID, owner, associated events, or RSVPs.

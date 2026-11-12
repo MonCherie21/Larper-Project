@@ -9,3 +9,20 @@ where id = 'a1111111-1111-1111-1111-111111111111'::uuid
 select id, name, description
 from public.organizations
 where id = 'a1111111-1111-1111-1111-111111111111'::uuid;
+
+-- Rename the existing CTE test organization without changing its ID or owner.
+-- Limited to the test organizer account and the exact former organization name.
+update public.organizations
+set name = 'CTE',
+    description = 'College of Teachers Education'
+where name = 'CTE Test Organization'
+  and owner_id = (
+    select id from auth.users
+    where email = 'cte.organizer@example.edu'
+  );
+
+-- Check both records after applying:
+select id, name, description
+from public.organizations
+where id = 'a1111111-1111-1111-1111-111111111111'::uuid
+   or name = 'CTE';

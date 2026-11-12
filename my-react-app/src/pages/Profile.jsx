@@ -58,7 +58,7 @@ export default function Profile() {
     <div className="mx-auto max-w-2xl space-y-6 py-2 sm:py-4">
       <header>
         <p className="text-xs font-bold uppercase tracking-widest text-indigo-700">Your Campus Connect account</p>
-        <h1 className="mt-1 text-3xl font-extrabold text-slate-900">Student profile</h1>
+        <h1 className="mt-1 text-3xl font-extrabold text-slate-900">{profile?.role === 'admin' ? 'Admin' : profile?.role === 'organizer' ? 'Organizer profile' : 'Student profile'}</h1>
       </header>
       <section className="space-y-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
         <div className="flex items-center gap-4">
