@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase'
+import { isLspuStudentEmail } from '../lib/institutionalEmail'
 import { EVENT_FIELDS } from './events'
 
 function client() {
@@ -16,8 +17,12 @@ export async function signIn(email, password) {
 }
 
 export async function signUp(fullName, email, password) {
+  const normalizedEmail = String(email || '').trim().toLowerCase()
+  if (!isLspuStudentEmail(normalizedEmail)) {
+    throw new Error('Use your LSPU institutional email (03xx-xxxx@lspu.edu.ph).')
+  }
   return check(await client().auth.signUp({
-    email,
+    email: normalizedEmail,
     password,
     options: { data: { full_name: fullName.trim() } },
   }))

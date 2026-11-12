@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" fill="none" aria-label="Illustrative emblem for CCS"><rect x="1" y="1" width="94" height="94" rx="25" fill="#E7F0F5"/>
+  <rect x="17" y="29" width="62" height="42" rx="7" fill="#ffffff" stroke="#153C58" stroke-width="3.7"/>
+  <path d="M37 42l-7 8 7 8M59 42l7 8-7 8M53 39l-9 22" fill="none" stroke="#326B8F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M22 24l26-12 26 12-26 12-26-12z" fill="#153C58" stroke="#ffffff" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M62 30v8" stroke="#153C58" stroke-width="3" stroke-linecap="round"/>
+  <path d="M36 38v-6M60 38v-6" stroke="#153C58" stroke-width="2" opacity=".6"/>
+  <path d="M32 77h32" stroke="#153C58" stroke-width="4" stroke-linecap="round"/></svg>
