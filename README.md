@@ -4,7 +4,11 @@
 **Primary challenge:** Quality of Life  
 **Related themes:** EdTech / Academic Accessibility; Data-Driven Administration
 
-> **Before submission:** Add your team's 3–5 members and their programs/sections here. Add the deployed URL after hosting.
+https://campis.vercel.app/
+Balitaan, Devin Lestat
+Bautista, Chrysler 
+Endrenal, Mon Euwen
+Saab, Edmund Joseph
 
 ## Documentation index
 
