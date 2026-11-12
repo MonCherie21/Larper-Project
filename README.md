@@ -4,11 +4,15 @@
 **Primary challenge:** Quality of Life  
 **Related themes:** EdTech / Academic Accessibility; Data-Driven Administration
 
-https://campis.vercel.app/
-Balitaan, Devin Lestat
-Bautista, Chrysler 
-Endrenal, Mon Euwen
-Saab, Edmund Joseph
+> **Live platform:** [https://campis.vercel.app](https://campis.vercel.app)  
+> **GitHub:** [MonCherie21/Larper-Project](https://github.com/MonCherie21/Larper-Project)
+
+## Team Members
+
+- Balitaan, Devin Lestat
+- Bautista, Chrysler
+- Endrenal, Mon Euwen
+- Saab, Edmund Joseph
 
 ## Documentation index
 
@@ -23,6 +27,7 @@ Saab, Edmund Joseph
 | [Feature 03 — Student discovery](my-react-app/FEATURE03_README.md) | Events, search, filtering, profile and bookmarks |
 | [Feature 05 — Organizer portal](my-react-app/FEATURE05_README.md) | Submissions, poster uploads and management |
 | [Features 06–08 — Final feature integration](my-react-app/FEATURE06_07_08_README.md) | Admin review, recommendations and participation |
+| [Final design and institutional signup](my-react-app/FINAL_DESIGN_AND_SIGNUP.md) | Dashboard, organization emblems, role-aware profiles, and signup hook setup |
 
 Some feature-specific documents describe their original implementation stage. For current full-project installation and deployment, use **this README**.
 
@@ -38,10 +43,12 @@ University events and student organization announcements are spread across diffe
 
 | Role | Main capabilities |
 | --- | --- |
-| Visitor | Browse approved upcoming events; search/filter; view public organization profiles |
+| Visitor | Browse approved events, search/filter, use the campus calendar, and view public organization profiles |
 | Student | RSVP and cancel, bookmark events, export .ics calendar files, update interests and receive explainable recommendations |
 | Organizer | Create/edit/delete **their own organization's** events; upload posters; view pending/approved/rejected status and RSVP counts |
 | Administrator | Review submissions, verify **Paperworks** and **Dean Approval**, approve/publish, reject with a reason, unpublish |
+
+**Institutional signups:** New student self-registration is checked against `03xx-xxxx@lspu.edu.ph` (every `x` a digit). A separate Supabase Auth **Before User Created** hook is supplied; **it must be installed and activated manually** before this becomes server-enforced. Existing demo accounts continue to sign in. Email confirmation verifies address ownership, not enrollment. See [setup notes](my-react-app/FINAL_DESIGN_AND_SIGNUP.md).
 
 **University authorization is external:** Campus Connect records that the dean's in-person approval and applicable paperwork have been verified; it does not replace the university process. RSVP expresses interest; it does not guarantee participation.
 
@@ -58,6 +65,13 @@ The recommendation system uses a lightweight deterministic weighting: 50% intere
 - Vercel for production web hosting.
 
 **Flow:** Vercel-hosted React frontend → Supabase Auth / PostgreSQL (RLS) / Storage.
+
+## Dashboard and organization polish
+
+- [PR #12](https://github.com/MonCherie21/Larper-Project/pull/12): campus calendar, academic-style brand mark, compact event presentation and cleaner navigation.
+- [PR #13](https://github.com/MonCherie21/Larper-Project/pull/13): clearer date-group separation in Upcoming Events; seven muted, **original illustrative** emblems for sample clubs (not official university seals). A genuine, authorized organization `logo_url` takes precedence.
+- Profile headers reflect account role: **Admin**, **Organizer profile**, or **Student profile**.
+- Sample CCS description: *College of Computer Science.* Sample CTE group: **CTE**, description *College of Teachers Education*. The [scoped SQL patch](supabase/patches/13_ccs_description.sql) must be run in Supabase to change existing records; it does not change organization IDs, owners, or events.
 
 ## Structure
 
@@ -113,8 +127,10 @@ When setting up a **new** Supabase database, apply these scripts from the SQL Ed
 4. `supabase/05_organizer_portal.sql`
 5. `supabase/patches/05_fix_storage_owner_policy.sql`
 6. `supabase/06_07_08_features.sql`
+7. `supabase/patches/13_ccs_description.sql` (optional demonstration-data label update)
+8. `supabase/patches/12_lspu_signup_hook.sql` (optional account-creation rule; the hook must then be enabled under **Authentication → Hooks → Before User Created**)
 
-For an **already initialized** database, run **only missing migrations**. Do not recreate accounts or reload demonstration seeds. GitHub merges never automatically run SQL scripts. Sample dataset scripts are under `supabase/examples/`.
+For an **already initialized** database, run **only missing migrations or scoped data patches**. Do not recreate accounts or reload demonstration seeds. GitHub merges never automatically run SQL scripts or activate Supabase Auth hooks. The new signup rule affects all **future newly created** accounts once activated (including new organizer/admin test users), but not existing logins. Keep confirmation enabled and test both allowed/blocked signups. Sample dataset scripts are under `supabase/examples/`.
 
 ## Test and demo sequence
 
@@ -124,13 +140,15 @@ For an **already initialized** database, run **only missing migrations**. Do not
 4. Refresh Events as a student; check newly published event, RSVP count, bookmark and calendar download.
 5. Reject or unpublish an event; check public visibility and organizer status.
 6. Set /preferences and review personalized suggestions on the dashboard.
-7. Confirm students cannot open /admin and organizers cannot modify other organizations' events.
+7. Confirm students cannot open `/admin` and organizers cannot modify other organizations' events; test direct RLS/API operations separately.
+8. Check the calendar, date groups, organization emblems and role-specific profile heading.
+9. If the signup hook has been enabled, test valid/invalid new registration and existing logins.
 
 See `my-react-app/FEATURE06_07_08_README.md` for additional tests.
 
 ## Vercel deployment
 
-1. Connect the GitHub repository `MonCherie21/Larper-Project` to Vercel.
+1. **Deployed production website:** [https://campis.vercel.app](https://campis.vercel.app). Connect the GitHub repository `MonCherie21/Larper-Project` to Vercel to manage future deployments.
 2. Set **Root Directory** to `my-react-app`, **Framework** to Vite, **Build Command** to `npm run build`, and **Output Directory** to `dist`.
 3. Under Vercel Project Settings → Environment Variables, set **VITE_SUPABASE_URL** and **VITE_SUPABASE_PUBLISHABLE_KEY** for Production. Redeploy when changed.
 4. The `my-react-app/vercel.json` rewrite sends direct React Router URLs (e.g. `/admin`) to the SPA entry point.
@@ -139,10 +157,10 @@ See `my-react-app/FEATURE06_07_08_README.md` for additional tests.
 
 ## Known limitations and future work
 
-No timetable synchronization, participation eligibility check, university SSO, push notification service, or digitally issued dean approval exists. Further expansion could onboard more colleges, organization representatives and campus offices, and integrate official university systems.
+No timetable synchronization, participation eligibility check, university SSO, push notification service, or digitally issued dean approval exists. The university-format email check does not itself establish current enrollment; email-change flows and stronger identity verification are outside the current implementation. Further expansion could onboard more colleges, organization representatives and campus offices, and integrate official university systems.
 
 ## Hack4Success 2026 submission
 
 Official theme **Student Around Services**; submission deadline **November 12, 2026, 12:00 PM**; pitching **November 12, 2026, 1:00 PM** at **CTE Function Hall**. Submission requires a source-code/prototype link and complete README, a **5–10 slide deck**, and a **maximum 10-minute live pitch** with working demo plus Q&A.
 
-Add your team's names and a verified deployment URL before submitting.
+**Live deployment:** [Campus Connect](https://campis.vercel.app). Verify the listed team members and all required submission materials before sharing the final repository link.
